@@ -758,59 +758,190 @@ const db = firebase.firestore();
         }
 
         // ==========================================
-// ฟังก์ชันสำหรับล็อกอินด้วย Google
+// 1. ระบบสมัครสมาชิก (Popup)
+// ==========================================
+function showRegisterPopup() {
+    Swal.fire({
+        title: '<span class="text-xl font-bold">สมัครสมาชิกใหม่</span>',
+        html: `
+            <div class="text-left text-sm mb-4 text-slate-500">* กรุณาใช้อีเมล @rumail.ru.ac.th เท่านั้น</div>
+            <input id="regName" class="swal2-input text-sm !mx-0 !w-full !mt-2" placeholder="ชื่อ-นามสกุล">
+            <input id="regEmail" class="swal2-input text-sm !mx-0 !w-full !mt-3" placeholder="อีเมลมหาลัย (@rumail.ru.ac.th)">
+            <input id="regUsername" class="swal2-input text-sm !mx-0 !w-full !mt-3" placeholder="ตั้งชื่อผู้ใช้งาน (Username)">
+            <input id="regPassword" type="password" class="swal2-input text-sm !mx-0 !w-full !mt-3" placeholder="ตั้งรหัสผ่าน">
+        `,
+        showCancelButton: true,
+        confirmButtonText: 'ยืนยันการสมัคร',
+        cancelButtonText: 'ยกเลิก',
+        confirmButtonColor: '#16a34a',
+        preConfirm: () => {
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value;
+
+            if (!name || !email || !username || !password) {
+                Swal.showValidationMessage('กรุณากรอกข้อมูลให้ครบถ้วน'); return false;
+            }
+            if (!email.endsWith('@rumail.ru.ac.th')) {
+                Swal.showValidationMessage('ต้องใช้อีเมล @rumail.ru.ac.th เท่านั้นครับ'); return false;
+            }
+            return { name, email, username, password };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            let data = result.value;
+            Swal.fire({ title: 'กำลังตรวจสอบข้อมูล...', didOpen: () => Swal.showLoading() });
+            
+            // เช็กว่า Username หรือ Email นี้มีคนใช้หรือยัง
+            db.collection("Users").where("email", "==", data.email).get().then(snapEmail => {
+                if (!snapEmail.empty) {
+                    Swal.fire('ข้อผิดพลาด', 'อีเมลนี้ถูกลงทะเบียนไว้แล้ว', 'error');
+                } else {
+                    db.collection("Users").where("username", "==", data.username).get().then(snapUser => {
+                        if (!snapUser.empty) {
+                            Swal.fire('ข้อผิดพลาด', 'ชื่อผู้ใช้งานนี้มีคนใช้แล้ว', 'error');
+                        } else {
+                            // ดึงรหัสนักศึกษาจากอีเมล
+let studentId = data.email.split('@')[0];
+
+// 🧠 ระบบคำนวณชั้นปีอัตโนมัติ (อิงปีการศึกษา 69)
+let entryYear = parseInt(studentId.substring(0, 2)); 
+let currentAcademicYear = 69; 
+let calculatedYear = (currentAcademicYear - entryYear) + 1;
+
+// กันเหนียว: ถ้าคำนวณแล้วแปลกๆ ให้เป็นปี 1
+if (isNaN(calculatedYear) || calculatedYear < 1 || calculatedYear > 8) {
+    calculatedYear = 1;
+}
+
+// บันทึกลงตู้เอกสาร
+db.collection("Users").add({
+    name: data.name,
+    email: data.email,
+    username: data.username,
+    password: data.password,
+    studentId: studentId,
+    year: calculatedYear.toString(), // 🌟 ยัดชั้นปีที่คำนวณได้ลงไป
+    role: "student",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+}).then(() => {
+    Swal.fire('สำเร็จ!', 'สมัครสมาชิกเรียบร้อย คุณสามารถเข้าสู่ระบบได้เลย', 'success');
+});
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
+
+// ==========================================
+// 2. ระบบเข้าสู่ระบบด้วย Username + Password
+// ==========================================
+function loginWithUsername() {
+    let un = document.getElementById('username').value.trim();
+    let pw = document.getElementById('password').value;
+
+    if (!un || !pw) {
+        Swal.fire('แจ้งเตือน', 'กรุณากรอกชื่อผู้ใช้งานและรหัสผ่าน', 'warning'); return;
+    }
+
+    Swal.fire({ title: 'กำลังเข้าสู่ระบบ...', didOpen: () => Swal.showLoading() });
+
+    db.collection("Users").where("username", "==", un).where("password", "==", pw).get().then((snapshot) => {
+        if (!snapshot.empty) {
+            let doc = snapshot.docs[0];
+            currentUser = doc.data();
+            currentUser.id = doc.id;
+            currentUser.studentId = currentUser.studentId || doc.id;
+            showStudentDashboard();
+        } else {
+            Swal.fire('เข้าไม่ได้', 'ชื่อผู้ใช้งาน หรือ รหัสผ่าน ไม่ถูกต้อง', 'error');
+        }
+    }).catch((error) => {
+        console.error("Login error:", error);
+        Swal.fire('ข้อผิดพลาด', 'ระบบมีปัญหา กรุณาลองใหม่', 'error');
+    });
+}
+
+// ==========================================
+// 3. ระบบเข้าสู่ระบบด้วย Google (รองรับคนสมัครสมาชิกไว้แล้ว)
 // ==========================================
 function loginWithGoogle() {
     let provider = new firebase.auth.GoogleAuthProvider();
-    
-    Swal.fire({ title: appLang === 'en' ? 'Logging in...' : 'กำลังเข้าสู่ระบบ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    Swal.fire({ title: 'กำลังเชื่อมต่อบัญชี Google...', didOpen: () => Swal.showLoading() });
     
     firebase.auth().signInWithPopup(provider).then((result) => {
         let userEmail = result.user.email;
         
-        // เมื่อ Google ยืนยันตัวตนผ่าน ให้เอาอีเมลมาค้นหาประวัติในตู้เอกสารของเรา
-        db.collection("Users").where("email", "==", userEmail).get().then((querySnapshot) => {
-            if (!querySnapshot.empty) {
-                // เจอประวัตินักศึกษาในระบบแล้ว!
-                let doc = querySnapshot.docs[0];
-                let userData = doc.data();
-                
-                currentUser = userData; 
-                currentUser.id = doc.id; 
-                currentUser.studentId = userData.studentId || doc.id; 
-                
-                Swal.close();
-                document.getElementById('loginSection').style.display = 'none';
-                document.getElementById('studentSection').style.display = 'block';
-                
-                // โชว์ข้อมูลบนหน้าจอ
-                document.getElementById('headerName').innerText = currentUser.name || 'ไม่ระบุชื่อ';
-                document.getElementById('profileName').innerText = currentUser.name || 'ไม่ระบุชื่อ';
-                document.getElementById('profileId').innerText = appLang === 'en' ? `ID: ${currentUser.studentId} | Year ${currentUser.year}` : `รหัส: ${currentUser.studentId} | ชั้นปีที่ ${currentUser.year}`;
-                document.getElementById('profileEmail').innerText = currentUser.email || '-';
-                document.getElementById('greetingText').innerText = getGreeting();
-                
-                loadCourses(); // โหลดข้อมูลเกรดมาแสดง
+        // เช็กฐานข้อมูลว่าอีเมลนี้สมัครสมาชิกไว้หรือยัง
+        db.collection("Users").where("email", "==", userEmail).get().then((snapshot) => {
+            if (!snapshot.empty) {
+                let doc = snapshot.docs[0];
+                currentUser = doc.data();
+                currentUser.id = doc.id;
+                currentUser.studentId = currentUser.studentId || doc.id;
+                showStudentDashboard();
             } else {
-                // เมลถูกต้อง แต่แอดมินยังไม่ได้เพิ่มชื่อลงในระบบ
-                Swal.close();
-                firebase.auth().signOut(); // เตะออกก่อน
-                Swal.fire('เข้าไม่ได้', 'ไม่พบประวัติอีเมลนี้ในระบบ กรุณาติดต่อแอดมินเพื่อเพิ่มข้อมูล', 'warning');
+                firebase.auth().signOut();
+                Swal.fire('ไม่พบข้อมูล', 'คุณยังไม่ได้สมัครสมาชิก กรุณากดปุ่มสมัครสมาชิกก่อนครับ', 'warning');
             }
-        }).catch((error) => {
-            Swal.close();
-            console.error("Firestore Error:", error);
-            Swal.fire('ข้อผิดพลาด', 'เชื่อมต่อฐานข้อมูลล้มเหลว', 'error');
         });
-        
     }).catch((error) => {
         Swal.close();
-        console.error("Google Login Error:", error);
-        // ถ้าผู้ใช้กดยกเลิก หรือปิดหน้าต่างไปเอง ไม่ต้องโชว์แจ้งเตือน Error น่ากลัวๆ
         if (error.code !== 'auth/popup-closed-by-user') {
             Swal.fire('ข้อผิดพลาด', 'เข้าสู่ระบบด้วย Google ไม่สำเร็จ', 'error');
         }
     });
+}
+
+// ----------------------------------------------------
+// ฟังก์ชันโชว์หน้าแอดมินแบบเล็กๆ
+function showAdminLogin() {
+    Swal.fire({
+        title: 'ผู้ดูแลระบบ',
+        html: `
+            <input id="adminEmail" class="swal2-input text-sm !w-full !mx-0" placeholder="อีเมลผู้ดูแล">
+            <input id="adminPassword" type="password" class="swal2-input text-sm !w-full !mx-0 !mt-3" placeholder="รหัสผ่าน">
+        `,
+        confirmButtonText: 'เข้าสู่ระบบ',
+        confirmButtonColor: '#16a34a',
+        preConfirm: () => {
+            const email = document.getElementById('adminEmail').value;
+            const password = document.getElementById('adminPassword').value;
+            if(!email || !password) { Swal.showValidationMessage('กรุณากรอกข้อมูลให้ครบ'); return false; }
+            return {email, password};
+        }
+    }).then((result) => {
+        if(result.isConfirmed) {
+            Swal.fire({ title: 'ตรวจสอบข้อมูล...', didOpen: () => Swal.showLoading() });
+            firebase.auth().signInWithEmailAndPassword(result.value.email, result.value.password)
+                .then((userCredential) => {
+                    Swal.close();
+                    document.getElementById('loginSection').style.display = 'none';
+                    document.getElementById('adminSection').style.display = 'block';
+                    loadAllStudents(); // โหลดข้อมูลแอดมิน
+                })
+                .catch((error) => {
+                    Swal.fire('เข้าไม่ได้', 'อีเมลหรือรหัสผ่านแอดมินไม่ถูกต้อง', 'error');
+                });
+        }
+    });
+}
+
+function showStudentDashboard() {
+    Swal.close();
+    document.getElementById('loginSection').style.display = 'none';
+    document.getElementById('studentSection').style.display = 'block';
+    
+    document.getElementById('headerName').innerText = currentUser.name || 'ไม่ระบุชื่อ';
+    document.getElementById('profileName').innerText = currentUser.name || 'ไม่ระบุชื่อ';
+    document.getElementById('profileId').innerText = appLang === 'en' ? `ID: ${currentUser.studentId} | Year ${currentUser.year}` : `รหัส: ${currentUser.studentId} | ชั้นปีที่ ${currentUser.year}`;
+    document.getElementById('profileEmail').innerText = currentUser.email || '-';
+    document.getElementById('greetingText').innerText = getGreeting();
+    
+    loadCourses(); // โหลดเกรด (รวมถึงระบบคำนวณเกียรตินิยมจะอยู่ในนี้ครับ ไม่ลืมแน่นอน!)
 }
         
         function logout(s) {
