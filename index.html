@@ -104,8 +104,7 @@
             </div>
         </div>
 
-        <div id="studentLoginBox" class="relative bg-white/80 backdrop-blur-2xl p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-full max-w-[90%] sm:max-w-[400px] md:max-w-[480px] border border-white z-10 text-center transition-all mt-16 md:mt-8 flex flex-col justify-center">
-            
+<div id="studentLoginBox" class="relative bg-white/80 backdrop-blur-2xl p-8 md:p-14 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-full max-w-[92%] sm:max-w-[420px] md:max-w-[500px] lg:max-w-[550px] border border-white z-10 text-center transition-all mt-16 md:mt-8 flex flex-col justify-center">            
             <div class="w-16 h-16 md:w-20 md:h-20 gradient-theme rounded-[1rem] md:rounded-[1.5rem] shadow-theme flex items-center justify-center mx-auto mb-4 md:mb-6 animate-float">
                 <i class="fa-solid fa-graduation-cap text-3xl md:text-4xl text-white"></i>
             </div>
@@ -151,8 +150,8 @@
             <p class="mt-6 md:mt-8 text-[9px] text-slate-400 font-light tracking-widest uppercase opacity-80">&copy; 2026 จัดทำโดย นายพงศ์ภัค โชครักษ์</p>
         </div>
 
-        <div id="adminLoginBox" class="hidden relative bg-white/80 backdrop-blur-2xl p-6 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-full max-w-[90%] sm:max-w-[400px] md:max-w-[480px] border border-white z-10 text-center transition-all mt-16 md:mt-8 flex flex-col justify-center">
-            
+<div id="adminLoginBox" class="hidden relative bg-white/80 backdrop-blur-2xl p-8 md:p-14 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-full max-w-[92%] sm:max-w-[420px] md:max-w-[500px] lg:max-w-[550px] border border-white z-10 text-center transition-all mt-16 md:mt-8 flex flex-col justify-center">
+    
             <div class="w-16 h-16 md:w-20 md:h-20 admin-gradient-theme rounded-[1rem] md:rounded-[1.5rem] shadow-lg shadow-green-200/50 flex items-center justify-center mx-auto mb-4 md:mb-6 animate-float">
                 <i class="fa-solid fa-server text-3xl md:text-4xl text-white"></i>
             </div>
@@ -183,9 +182,9 @@
         <div class="admin-gradient-theme text-white p-6 md:p-8 rounded-[2rem] shadow-lg mb-8 flex flex-col md:flex-row justify-between items-center gap-4 mt-6">
             <h2 class="text-xl md:text-2xl font-bold tracking-tight"><i class="fa-solid fa-shield-halved mr-2 text-white/70"></i> <span class="lang-txt" data-th="แผงควบคุมผู้ดูแลระบบ" data-en="Admin Dashboard">แผงควบคุมผู้ดูแลระบบ</span></h2>
             <div class="flex items-center gap-3 w-full md:w-auto">
-                <button id="adminDarkModeBtn" class="bg-white/20 hover:bg-white/30 border border-white/30 text-white w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center transition shadow-sm active:scale-95" title="Dark Mode">
-                    <i class="fa-solid fa-moon text-lg"></i>
-                </button>
+                <button id="adminDarkModeBtn" onclick="toggleAdminDarkMode()" class="bg-white/20 hover:bg-white/30 border border-white/30 text-white w-10 h-10 md:w-11 md:h-11 rounded-full flex items-center justify-center transition shadow-sm active:scale-95" title="Dark Mode">
+    <i class="fa-solid fa-moon text-lg"></i>
+</button>
                 <button onclick="logout('adminSection')" class="bg-white/20 hover:bg-red-500 hover:border-red-500 border border-white/30 text-white px-5 py-2.5 md:py-3 rounded-[1rem] text-sm md:text-base font-semibold transition shadow-sm flex items-center justify-center gap-2 active:scale-95 w-full md:w-auto">
                     <i class="fa-solid fa-power-off"></i> <span class="lang-txt" data-th="ออกจากระบบ" data-en="Logout">ออกจากระบบ</span>
                 </button>
@@ -1506,8 +1505,9 @@ function calculateStatus(totalCr) {
                 Swal.fire(appLang === 'en' ? 'Error' : 'ผิดพลาด', err.message, 'error');
             });
         }
+
         // ==========================================
-// ฟังก์ชันลับสำหรับแอดมิน: โยนวิชาทั้งหมดเข้า Firebase แบบอัตโนมัติ
+// ฟังก์ชันลับสำหรับแอดมิน: โยนวิชาทั้งหมดเข้า Firebase (เวอร์ชันแจ้งเตือน Error)
 // ==========================================
 function syncCoursesToDB() {
     Swal.fire({
@@ -1519,27 +1519,70 @@ function syncCoursesToDB() {
         cancelButtonText: 'ยกเลิก'
     }).then((result) => {
         if (result.isConfirmed) {
+            // 🛑 ดักจับก่อนเลยว่าตัวแปรรายวิชาหายไปไหนหรือเปล่า
+            if (typeof BASE_COURSES === 'undefined' || !BASE_COURSES || BASE_COURSES.length === 0) {
+                return Swal.fire('ข้อผิดพลาด', 'ไม่พบรายวิชาในระบบ (BASE_COURSES หายไป)', 'error');
+            }
+
             Swal.fire({ title: 'กำลังอัปโหลด...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
             
-            let batch = db.batch();
-            
-            // เตรียมข้อมูลอัปโหลด
-            let curRef67 = db.collection("Curriculums").doc("2567");
-            let curRef68 = db.collection("Curriculums").doc("2568");
-            let curRef69 = db.collection("Curriculums").doc("2569");
-            
-            batch.set(curRef67, { year: "2567", courses: BASE_COURSES });
-            batch.set(curRef68, { year: "2568", courses: BASE_COURSES }); // ตอนนี้ใช้ของ 67 ไปก่อน
-            batch.set(curRef69, { year: "2569", courses: BASE_COURSES }); // ตอนนี้ใช้ของ 67 ไปก่อน
-            
-            batch.commit().then(() => {
-                Swal.fire('สำเร็จ!', 'อัปโหลดรายวิชาเข้าฐานข้อมูลเรียบร้อยแล้ว!', 'success');
-            }).catch((error) => {
-                console.error("Error writing document: ", error);
-                Swal.fire('ข้อผิดพลาด', 'อัปโหลดไม่สำเร็จ', 'error');
-            });
+            try {
+                let batch = db.batch();
+                
+                let curRef67 = db.collection("Curriculums").doc("2567");
+                let curRef68 = db.collection("Curriculums").doc("2568");
+                let curRef69 = db.collection("Curriculums").doc("2569");
+                
+                batch.set(curRef67, { year: "2567", courses: BASE_COURSES });
+                batch.set(curRef68, { year: "2568", courses: BASE_COURSES }); 
+                batch.set(curRef69, { year: "2569", courses: BASE_COURSES }); 
+                
+                batch.commit().then(() => {
+                    Swal.fire('สำเร็จ!', 'อัปโหลดรายวิชาเข้าฐานข้อมูลเรียบร้อยแล้ว!', 'success');
+                }).catch((error) => {
+                    console.error("Error details: ", error);
+                    // 🌟 ฟ้อง Error แบบละเอียดออกมาที่หน้าจอเลย! 🌟
+                    Swal.fire('ฐานข้อมูลปฏิเสธ', 'สาเหตุ: ' + error.message, 'error');
+                });
+            } catch (e) {
+                Swal.fire('โค้ดมีปัญหา', 'สาเหตุ: ' + e.message, 'error');
+            }
         }
     });
+}
+        
+        // ==========================================
+// ฟังก์ชันสลับโหมดมืด (Dark Mode) สำหรับหน้าแอดมิน
+// ==========================================
+let isAdminDark = false;
+function toggleAdminDarkMode() {
+    isAdminDark = !isAdminDark;
+    const adminSection = document.getElementById('adminSection');
+    const icon = document.querySelector('#adminDarkModeBtn i');
+    
+    if (isAdminDark) {
+        // เปิดโหมดมืด
+        document.body.style.backgroundColor = '#0f172a'; // สีพื้นหลังเข้ม
+        adminSection.querySelectorAll('.bg-white').forEach(el => {
+            el.classList.replace('bg-white', 'bg-slate-800');
+            el.classList.add('border-slate-700');
+        });
+        adminSection.querySelectorAll('.text-slate-800, .text-slate-600').forEach(el => {
+            el.classList.add('!text-slate-200');
+        });
+        icon.classList.replace('fa-moon', 'fa-sun'); // เปลี่ยนไอคอนเป็นพระอาทิตย์
+    } else {
+        // กลับเป็นโหมดสว่าง
+        document.body.style.backgroundColor = '#f4f7fb';
+        adminSection.querySelectorAll('.bg-slate-800').forEach(el => {
+            el.classList.replace('bg-slate-800', 'bg-white');
+            el.classList.remove('border-slate-700');
+        });
+        adminSection.querySelectorAll('.\\!text-slate-200').forEach(el => {
+            el.classList.remove('!text-slate-200');
+        });
+        icon.classList.replace('fa-sun', 'fa-moon');
+    }
 }
     </script>
 </body>
