@@ -127,6 +127,16 @@
                 </div>
                 
                 <button type="submit" class="lang-txt w-full gradient-theme text-white p-4 rounded-2xl font-bold text-lg mt-6 transition active:scale-95 shadow-theme" data-th="เข้าสู่ระบบ" data-en="Login">เข้าสู่ระบบ</button>
+                <!-- เส้นคั่น "หรือ" -->
+<div class="flex items-center my-5 before:flex-1 before:border-t before:border-slate-200 before:mt-0.5 after:flex-1 after:border-t after:border-slate-200 after:mt-0.5">
+    <p class="text-center text-xs font-semibold mx-4 mb-0 text-slate-400">หรือ</p>
+</div>
+
+<!-- ปุ่มล็อกอินด้วย Google -->
+<button onclick="loginWithGoogle()" class="w-full flex items-center justify-center gap-3 bg-white border-2 border-slate-200 text-slate-600 font-bold py-3.5 px-4 rounded-xl transition-all hover:bg-slate-50 hover:border-slate-300 active:scale-[0.98] text-sm shadow-sm mt-3">
+    <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5" alt="Google">
+    <span class="lang-txt" data-th="เข้าสู่ระบบด้วย Google" data-en="Sign in with Google">เข้าสู่ระบบด้วย Google</span>
+</button>
                 
                 <button type="button" onclick="toggleLoginView('admin')" class="w-full mt-3 bg-white text-slate-600 p-4 rounded-2xl font-semibold text-sm transition hover:bg-slate-50 active:scale-95 shadow-sm border border-slate-200 flex items-center justify-center gap-2">
                     <i class="fa-solid fa-user-shield text-theme text-base"></i> <span class="lang-txt" data-th="เข้าสู่ระบบผู้ดูแล" data-en="Admin Login">เข้าสู่ระบบผู้ดูแล</span>
@@ -738,6 +748,62 @@ const db = firebase.firestore();
                 Swal.fire('ข้อผิดพลาด', errorMsg, 'error');
             });
         }
+
+        // ==========================================
+// ฟังก์ชันสำหรับล็อกอินด้วย Google
+// ==========================================
+function loginWithGoogle() {
+    let provider = new firebase.auth.GoogleAuthProvider();
+    
+    Swal.fire({ title: appLang === 'en' ? 'Logging in...' : 'กำลังเข้าสู่ระบบ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    
+    firebase.auth().signInWithPopup(provider).then((result) => {
+        let userEmail = result.user.email;
+        
+        // เมื่อ Google ยืนยันตัวตนผ่าน ให้เอาอีเมลมาค้นหาประวัติในตู้เอกสารของเรา
+        db.collection("Users").where("email", "==", userEmail).get().then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+                // เจอประวัตินักศึกษาในระบบแล้ว!
+                let doc = querySnapshot.docs[0];
+                let userData = doc.data();
+                
+                currentUser = userData; 
+                currentUser.id = doc.id; 
+                currentUser.studentId = userData.studentId || doc.id; 
+                
+                Swal.close();
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('studentSection').style.display = 'block';
+                
+                // โชว์ข้อมูลบนหน้าจอ
+                document.getElementById('headerName').innerText = currentUser.name || 'ไม่ระบุชื่อ';
+                document.getElementById('profileName').innerText = currentUser.name || 'ไม่ระบุชื่อ';
+                document.getElementById('profileId').innerText = appLang === 'en' ? `ID: ${currentUser.studentId} | Year ${currentUser.year}` : `รหัส: ${currentUser.studentId} | ชั้นปีที่ ${currentUser.year}`;
+                document.getElementById('profileEmail').innerText = currentUser.email || '-';
+                document.getElementById('greetingText').innerText = getGreeting();
+                
+                loadCourses(); // โหลดข้อมูลเกรดมาแสดง
+            } else {
+                // เมลถูกต้อง แต่แอดมินยังไม่ได้เพิ่มชื่อลงในระบบ
+                Swal.close();
+                firebase.auth().signOut(); // เตะออกก่อน
+                Swal.fire('เข้าไม่ได้', 'ไม่พบประวัติอีเมลนี้ในระบบ กรุณาติดต่อแอดมินเพื่อเพิ่มข้อมูล', 'warning');
+            }
+        }).catch((error) => {
+            Swal.close();
+            console.error("Firestore Error:", error);
+            Swal.fire('ข้อผิดพลาด', 'เชื่อมต่อฐานข้อมูลล้มเหลว', 'error');
+        });
+        
+    }).catch((error) => {
+        Swal.close();
+        console.error("Google Login Error:", error);
+        // ถ้าผู้ใช้กดยกเลิก หรือปิดหน้าต่างไปเอง ไม่ต้องโชว์แจ้งเตือน Error น่ากลัวๆ
+        if (error.code !== 'auth/popup-closed-by-user') {
+            Swal.fire('ข้อผิดพลาด', 'เข้าสู่ระบบด้วย Google ไม่สำเร็จ', 'error');
+        }
+    });
+}
         
         function logout(s) {
             document.getElementById(s).style.display = 'none';
