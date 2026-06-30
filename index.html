@@ -109,24 +109,26 @@
         </div>
     </div>
 
-<div id="studentLoginBox" class="absolute top-24 left-1/2 -translate-x-1/2 sm:static sm:translate-x-0 bg-white/80 backdrop-blur-2xl px-6 pt-8 pb-12 sm:p-10 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all sm:my-auto flex flex-col justify-center">
+<div id="studentLoginBox" class="relative top-3 bg-white/80 backdrop-blur-2xl px-6 py-8 sm:p-10 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all my-auto flex flex-col justify-center mx-auto">
     
-            <div class="w-16 h-16 md:w-20 md:h-20 gradient-theme rounded-[1rem] md:rounded-[1.5rem] shadow-theme flex items-center justify-center mx-auto mb-5 md:mb-6 animate-float">
+            <div class="w-16 h-16 md:w-20 md:h-20 gradient-theme rounded-[1rem] md:rounded-[1.5rem] shadow-theme flex items-center justify-center mx-auto mb-4 md:mb-6 animate-float">
                 <i class="fa-solid fa-graduation-cap text-3xl md:text-4xl text-white"></i>
             </div>
 
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight mb-2 lang-txt" data-th="ระบบคำนวณผลการเรียน" data-en="Grade Calculation System">ระบบคำนวณผลการเรียน</h1>
-            <p class="text-[11px] md:text-xs font-bold text-theme uppercase tracking-[0.15em] mb-7 md:mb-9">Bachelor of Education</p>
+            <!-- ขยายตัวหนังสือส่วนหัวให้สมดุลตามที่ต้องการ -->
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight mb-1 lang-txt" data-th="ระบบคำนวณผลการเรียน" data-en="Grade Calculation System">ระบบคำนวณผลการเรียน</h1>
+            <p class="text-[10px] md:text-xs font-bold text-theme uppercase tracking-[0.15em] mb-6 md:mb-8">Bachelor of Education</p>
             
-            <form onsubmit="event.preventDefault(); loginWithUsername();" class="space-y-3.5 md:space-y-4 text-left w-full">
+            <form onsubmit="event.preventDefault(); loginWithUsername();" class="space-y-3 md:space-y-4 text-left w-full">
+                <!-- ขนาดช่องกรอก py-3 md:py-3.5 -->
                 <div class="relative">
                     <i class="fa-solid fa-user absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base"></i>
-                    <input type="text" id="username" name="username" class="lang-placeholder w-full pl-10 md:pl-12 pr-4 py-3.5 md:py-4 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white hover:border-green-500 focus:ring-4 focus:ring-green-500/10 transition text-sm md:text-base font-medium" placeholder="ชื่อผู้ใช้งาน (Username)">
+                    <input type="text" id="username" name="username" class="lang-placeholder w-full pl-10 md:pl-12 pr-4 py-3 md:py-3.5 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white hover:border-green-500 focus:ring-4 focus:ring-green-500/10 transition text-sm md:text-base font-medium" placeholder="ชื่อผู้ใช้งาน (Username)">
                 </div>
                 
                 <div class="relative">
                     <i class="fa-solid fa-lock absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base"></i>
-                    <input type="password" id="password" name="password" class="lang-placeholder w-full pl-10 md:pl-12 pr-10 py-3.5 md:py-4 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white hover:border-green-500 focus:ring-4 focus:ring-green-500/10 transition text-sm md:text-base font-medium" placeholder="รหัสผ่าน">
+                    <input type="password" id="password" name="password" class="lang-placeholder w-full pl-10 md:pl-12 pr-10 py-3 md:py-3.5 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white hover:border-green-500 focus:ring-4 focus:ring-green-500/10 transition text-sm md:text-base font-medium" placeholder="รหัสผ่าน">
                     <i class="fa-solid fa-eye-slash absolute right-4 md:right-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base cursor-pointer hover:text-green-600 transition" onclick="togglePassword('password', this)"></i>
                 </div>
 
@@ -142,7 +144,7 @@
                     <i class="fa-solid fa-circle-exclamation mr-1"></i> <span id="errorText" lang="th">ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง</span>
                 </div>
                 
-                <button type="submit" class="w-full gradient-theme text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl font-bold text-sm md:text-base mt-2 transition active:scale-95 shadow-theme">
+                <button type="submit" class="w-full gradient-theme text-white py-3 md:py-3.5 rounded-xl md:rounded-2xl font-bold text-sm md:text-base mt-2 transition active:scale-95 shadow-theme">
                     เข้าสู่ระบบ
                 </button>
                 
@@ -152,13 +154,14 @@
                     <div class="h-px bg-slate-300 w-full"></div>
                 </div>
 
+                <!-- ปรับปุ่ม Google และสมัครสมาชิก ให้ขนาดเท่ากับช่องรหัสผ่าน (py-3 md:py-3.5) -->
                 <div class="flex flex-col gap-3">
-                    <button type="button" onclick="loginWithGoogle()" class="w-full flex items-center justify-center gap-2 md:gap-3 bg-white border border-slate-200 text-slate-600 font-bold py-3.5 md:py-4 px-4 rounded-xl md:rounded-2xl transition hover:bg-slate-50 active:scale-95 text-xs md:text-sm shadow-sm">
+                    <button type="button" onclick="loginWithGoogle()" class="w-full flex items-center justify-center gap-2 md:gap-3 bg-white border border-slate-200 text-slate-600 font-bold py-3 md:py-3.5 px-4 rounded-xl md:rounded-2xl transition hover:bg-slate-50 active:scale-95 text-xs md:text-sm shadow-sm">
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-4 h-4 md:w-5 md:h-5" alt="Google">
                         เข้าสู่ระบบด้วย Google
                     </button>
                     
-                    <button type="button" onclick="showRegisterPopup()" style="background-color: rgba(var(--primary-theme-rgb), 0.08); color: var(--primary-theme); border-color: rgba(var(--primary-theme-rgb), 0.2);" class="w-full flex items-center justify-center gap-2 md:gap-3 font-bold py-3.5 md:py-4 px-4 rounded-xl md:rounded-2xl transition hover:opacity-80 active:scale-95 text-xs md:text-sm shadow-sm border">
+                    <button type="button" onclick="showRegisterPopup()" style="background-color: rgba(var(--primary-theme-rgb), 0.08); color: var(--primary-theme); border-color: rgba(var(--primary-theme-rgb), 0.2);" class="w-full flex items-center justify-center gap-2 md:gap-3 font-bold py-3 md:py-3.5 px-4 rounded-xl md:rounded-2xl transition hover:opacity-80 active:scale-95 text-xs md:text-sm shadow-sm border">
                         <i class="fa-solid fa-user-plus text-sm md:text-base"></i>
                         สมัครสมาชิกใหม่
                     </button>
@@ -168,36 +171,39 @@
                     <a href="#" onclick="toggleLoginView('admin')" class="text-xs text-slate-400 font-medium hover:text-slate-600 hover:underline transition" lang="th">เข้าสู่ระบบผู้ดูแล (Admin)</a>
                 </div>
             </form>
-            <p class="mt-6 text-[9px] text-slate-400 font-light tracking-widest uppercase opacity-80">&copy; 2026 จัดทำโดย นายพงศ์ภัค โชครักษ์</p>
+            
+            <!-- ดันขอบขาวด้านล่างให้ยืดลง ด้วยการเพิ่มระยะ mb-5 เข้าไป -->
+            <p class="mt-8 mb-5 text-[9px] text-slate-400 font-light tracking-widest uppercase opacity-80">&copy; 2026 จัดทำโดย นายพงศ์ภัค โชครักษ์</p>
 </div>
 
-<div id="adminLoginBox" class="hidden absolute top-24 left-1/2 -translate-x-1/2 sm:static sm:translate-x-0 bg-white/80 backdrop-blur-2xl px-6 pt-8 pb-12 sm:p-12 md:p-14 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all sm:my-auto flex flex-col justify-center">
+<div id="adminLoginBox" class="hidden relative top-3 bg-white/80 backdrop-blur-2xl px-6 py-8 sm:p-12 md:p-14 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all my-auto flex flex-col justify-center mx-auto">
     
-            <div class="w-16 h-16 md:w-20 md:h-20 admin-gradient-theme rounded-[1rem] md:rounded-[1.5rem] shadow-lg shadow-green-200/50 flex items-center justify-center mx-auto mb-5 md:mb-6 animate-float">
+            <div class="w-16 h-16 md:w-20 md:h-20 admin-gradient-theme rounded-[1rem] md:rounded-[1.5rem] shadow-lg shadow-green-200/50 flex items-center justify-center mx-auto mb-4 md:mb-6 animate-float">
                 <i class="fa-solid fa-server text-3xl md:text-4xl text-white"></i>
             </div>
             
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight mb-2 lang-txt" data-th="แผงควบคุมระบบ" data-en="System Dashboard">แผงควบคุมระบบ</h1>
-            <p class="text-[11px] md:text-xs font-bold admin-text-theme uppercase tracking-[0.15em] mb-7 md:mb-9 lang-txt" data-th="สำหรับผู้ดูแลระบบ (ADMIN)" data-en="Administrator (ADMIN)">สำหรับผู้ดูแลระบบ (ADMIN)</p>
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight mb-1 lang-txt" data-th="แผงควบคุมระบบ" data-en="System Dashboard">แผงควบคุมระบบ</h1>
+            <p class="text-[10px] md:text-xs font-bold admin-text-theme uppercase tracking-[0.15em] mb-6 md:mb-8 lang-txt" data-th="สำหรับผู้ดูแลระบบ (ADMIN)" data-en="Administrator (ADMIN)">สำหรับผู้ดูแลระบบ (ADMIN)</p>
             
-            <form onsubmit="event.preventDefault(); login('admin');" class="space-y-3.5 md:space-y-4 text-left w-full">
+            <form onsubmit="event.preventDefault(); login('admin');" class="space-y-3 md:space-y-4 text-left w-full">
                 <div class="relative">
                     <i class="fa-solid fa-user-tie absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base"></i>
-                    <input type="text" id="adminUsername" class="w-full pl-10 md:pl-12 pr-4 py-3.5 md:py-4 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-50 transition text-sm md:text-base font-medium" placeholder="ชื่อผู้ใช้งาน (Admin Username)">
+                    <input type="text" id="adminUsername" class="w-full pl-10 md:pl-12 pr-4 py-3 md:py-3.5 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-50 transition text-sm md:text-base font-medium" placeholder="ชื่อผู้ใช้งาน (Admin Username)">
                 </div>
                 <div class="relative">
                     <i class="fa-solid fa-key absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base"></i>
-                    <input type="password" id="adminPassword" class="w-full pl-10 md:pl-12 pr-10 py-3.5 md:py-4 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-50 transition text-sm md:text-base font-medium" placeholder="รหัสผ่าน">
+                    <input type="password" id="adminPassword" class="w-full pl-10 md:pl-12 pr-10 py-3 md:py-3.5 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white focus:border-green-500 focus:ring-4 focus:ring-green-50 transition text-sm md:text-base font-medium" placeholder="รหัสผ่าน">
                     <i class="fa-solid fa-eye-slash absolute right-4 md:right-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base cursor-pointer hover:text-green-600 transition" onclick="togglePassword('adminPassword', this)"></i>
                 </div>
                 
-                <button type="submit" class="w-full admin-gradient-theme text-white py-3.5 md:py-4 rounded-xl md:rounded-2xl font-bold text-sm md:text-base mt-2 transition hover:shadow-lg active:scale-95 shadow-md">เข้าสู่ระบบแอดมิน</button>
+                <button type="submit" class="w-full admin-gradient-theme text-white py-3 md:py-3.5 rounded-xl md:rounded-2xl font-bold text-sm md:text-base mt-2 transition hover:shadow-lg active:scale-95 shadow-md">เข้าสู่ระบบแอดมิน</button>
                 
-                <button type="button" onclick="toggleLoginView('student')" class="w-full bg-white text-slate-600 py-3.5 md:py-4 rounded-xl md:rounded-2xl font-semibold text-sm transition hover:bg-slate-50 active:scale-95 shadow-sm border border-slate-200 flex items-center justify-center gap-2 mt-2">
+                <button type="button" onclick="toggleLoginView('student')" class="w-full bg-white text-slate-600 py-3 md:py-3.5 rounded-xl md:rounded-2xl font-semibold text-xs md:text-sm transition hover:bg-slate-50 active:scale-95 shadow-sm border border-slate-200 flex items-center justify-center gap-2 mt-2">
                     <i class="fa-solid fa-arrow-left text-slate-400"></i> กลับหน้านักศึกษา
                 </button>
             </form>
-            <p class="mt-6 md:mt-8 text-[9px] text-slate-400 font-light tracking-widest uppercase opacity-80">&copy; 2026 จัดทำโดย นายพงศ์ภัค โชครักษ์</p>
+            
+            <p class="mt-8 mb-5 text-[9px] text-slate-400 font-light tracking-widest uppercase opacity-80">&copy; 2026 จัดทำโดย นายพงศ์ภัค โชครักษ์</p>
 </div>
     </div>
     
@@ -1777,7 +1783,7 @@ function forgotPassword(e) {
         title: appLang === 'en' ? 'Forgot Password?' : 'ลืมรหัสผ่าน?',
         html: appLang === 'en' 
             ? 'Please contact the administrator to reset your password.<br><br><b class="text-theme">Email: 6704001889@rumail.ru.ac.th</b>' 
-            : 'กรุณาติดต่อผู้ดูแลระบบเพื่อขอรีเซ็ตรหัสผ่านใหม่ครับ<br><br><b class="text-theme text-base">Gmail : 6704001889@rumail.ru.ac.th</b>',
+            : 'กรุณาติดต่อผู้ดูแลระบบเพื่อขอรีเซ็ตรหัสผ่านใหม่ค่ะ<br><br><b class="text-theme text-base">Gmail : 6704001889@rumail.ru.ac.th</b>',
         icon: 'info',
         confirmButtonColor: 'var(--primary-theme)',
         customClass: { popup: 'rounded-[2rem]' }
