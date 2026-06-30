@@ -109,7 +109,7 @@
         </div>
     </div>
 
-       <div id="studentLoginBox" class="relative bg-white/80 backdrop-blur-2xl px-6 pt-8 pb-12 sm:p-10 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all mt-24 mb-10 sm:my-auto flex flex-col justify-center mx-auto">
+       <div id="studentLoginBox" class="relative bg-white/80 backdrop-blur-2xl px-6 pt-8 pb-16 sm:px-10 sm:pt-10 sm:pb-16 md:px-12 md:pt-12 md:pb-20 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all my-auto flex flex-col justify-center mx-auto">
     
             <div class="w-16 h-16 md:w-20 md:h-20 gradient-theme rounded-[1rem] md:rounded-[1.5rem] shadow-theme flex items-center justify-center mx-auto mb-4 md:mb-6 animate-float">
                 <i class="fa-solid fa-graduation-cap text-3xl md:text-4xl text-white"></i>
@@ -153,25 +153,25 @@
                 </div>
 
                 <div class="flex flex-col gap-3">
-                    <button type="button" onclick="loginWithGoogle()" class="w-full flex items-center justify-center gap-2 md:gap-3 bg-white border border-slate-200 text-slate-600 font-bold py-3.5 md:py-4 px-4 rounded-xl md:rounded-2xl transition hover:bg-slate-50 active:scale-95 text-sm shadow-sm">
+                    <button type="button" onclick="loginWithGoogle()" class="w-full flex items-center justify-center gap-2 md:gap-3 bg-white border border-slate-200 text-slate-600 font-bold py-3.5 md:py-4 px-4 rounded-xl md:rounded-2xl transition hover:bg-slate-50 active:scale-95 text-xs md:text-sm shadow-sm">
                         <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-4 h-4 md:w-5 md:h-5" alt="Google">
                         เข้าสู่ระบบด้วย Google
                     </button>
                     
-                    <button type="button" onclick="showRegisterPopup()" style="background-color: rgba(var(--primary-theme-rgb), 0.08); color: var(--primary-theme); border-color: rgba(var(--primary-theme-rgb), 0.2);" class="w-full flex items-center justify-center gap-2 md:gap-3 font-bold py-3.5 md:py-4 px-4 rounded-xl md:rounded-2xl transition hover:opacity-80 active:scale-95 text-sm shadow-sm border">
+                    <button type="button" onclick="showRegisterPopup()" style="background-color: rgba(var(--primary-theme-rgb), 0.08); color: var(--primary-theme); border-color: rgba(var(--primary-theme-rgb), 0.2);" class="w-full flex items-center justify-center gap-2 md:gap-3 font-bold py-3.5 md:py-4 px-4 rounded-xl md:rounded-2xl transition hover:opacity-80 active:scale-95 text-xs md:text-sm shadow-sm border">
                         <i class="fa-solid fa-user-plus text-sm md:text-base"></i>
                         สมัครสมาชิกใหม่
                     </button>
                 </div> 
                 
-                <div class="mt-5 text-center w-full">
+                <div class="mt-6 text-center w-full">
                     <a href="#" onclick="toggleLoginView('admin')" class="text-xs text-slate-400 font-medium hover:text-slate-600 hover:underline transition" lang="th">เข้าสู่ระบบผู้ดูแล (Admin)</a>
                 </div>
             </form>
             <p class="mt-8 text-[9px] text-slate-400 font-light tracking-widest uppercase opacity-80">&copy; 2026 จัดทำโดย นายพงศ์ภัค โชครักษ์</p>
 </div>
 
-<div id="adminLoginBox" class="hidden relative bg-white/80 backdrop-blur-2xl px-6 pt-8 pb-12 sm:p-12 md:p-14 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all mt-24 mb-10 sm:my-auto flex flex-col justify-center mx-auto">
+<div id="adminLoginBox" class="hidden relative bg-white/80 backdrop-blur-2xl px-6 pt-8 pb-16 sm:px-10 sm:pt-10 sm:pb-16 md:px-12 md:pt-12 md:pb-20 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all my-auto flex flex-col justify-center mx-auto">
     
             <div class="w-16 h-16 md:w-20 md:h-20 admin-gradient-theme rounded-[1rem] md:rounded-[1.5rem] shadow-lg shadow-green-200/50 flex items-center justify-center mx-auto mb-4 md:mb-6 animate-float">
                 <i class="fa-solid fa-server text-3xl md:text-4xl text-white"></i>
