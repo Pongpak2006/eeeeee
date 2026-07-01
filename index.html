@@ -21,7 +21,6 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <!-- วางบรรทัดนี้เพิ่มเข้าไป 👇 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
         
@@ -87,7 +86,7 @@
 </head>
 <body class="antialiased selection:bg-indigo-100">
 
-    <div id="loginSection" class="min-h-[100dvh] flex flex-col items-center justify-start md:justify-center p-4 md:p-8 bg-[#f4f7fb] relative overflow-hidden">
+    <div id="loginSection" class="min-h-[100dvh] flex flex-col items-center justify-start p-4 md:p-8 bg-[#f4f7fb] relative overflow-hidden">
         <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-200/40 rounded-full blur-[80px] pointer-events-none"></div>
         <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-200/40 rounded-full blur-[80px] pointer-events-none"></div>
 
@@ -110,7 +109,7 @@
         </div>
     </div>
 
-<div id="studentLoginBox" class="relative bg-white/80 backdrop-blur-2xl px-6 pt-8 pb-12 sm:p-10 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all flex flex-col justify-center mx-auto mt-10 mb-6 sm:mt-16 md:mt-auto md:mb-auto">
+        <div id="studentLoginBox" class="relative bg-white/80 backdrop-blur-2xl px-6 pt-8 pb-12 sm:p-10 md:p-12 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all flex flex-col justify-center mx-auto mt-10 sm:mt-16 mb-6">
     
             <div class="w-16 h-16 md:w-20 md:h-20 gradient-theme rounded-[1rem] md:rounded-[1.5rem] shadow-theme flex items-center justify-center mx-auto mb-5 md:mb-6 animate-float">
                 <i class="fa-solid fa-graduation-cap text-3xl md:text-4xl text-white"></i>
@@ -121,15 +120,16 @@
             
             <form onsubmit="event.preventDefault(); loginWithUsername();" class="space-y-3.5 md:space-y-4 text-left w-full">
                 <div class="relative">
-    <i class="fa-solid fa-user absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base"></i>
-    <input type="text" id="username" name="username" autocomplete="username" class="lang-placeholder w-full pl-10 md:pl-12 pr-4 py-3.5 md:py-4 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white hover:border-green-500 focus:ring-4 focus:ring-green-500/10 transition text-sm md:text-base font-medium" placeholder="ชื่อผู้ใช้งาน (Username)">
-</div>
+                    <i class="fa-solid fa-user absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base"></i>
+                    <input type="text" id="username" name="username" class="lang-placeholder w-full pl-10 md:pl-12 pr-4 py-3.5 md:py-4 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white hover:border-green-500 focus:ring-4 focus:ring-green-500/10 transition text-sm md:text-base font-medium" placeholder="ชื่อผู้ใช้งาน (Username)">
+                </div>
+                
+                <div class="relative">
+                    <i class="fa-solid fa-lock absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base"></i>
+                    <input type="password" id="password" name="password" class="lang-placeholder w-full pl-10 md:pl-12 pr-10 py-3.5 md:py-4 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white hover:border-green-500 focus:ring-4 focus:ring-green-500/10 transition text-sm md:text-base font-medium" placeholder="รหัสผ่าน">
+                    <i class="fa-solid fa-eye-slash absolute right-4 md:right-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base cursor-pointer hover:text-green-600 transition" onclick="togglePassword('password', this)"></i>
+                </div>
 
-<div class="relative">
-    <i class="fa-solid fa-lock absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base"></i>
-    <input type="password" id="password" name="password" autocomplete="current-password" class="lang-placeholder w-full pl-10 md:pl-12 pr-10 py-3.5 md:py-4 bg-slate-50 border border-slate-200 rounded-xl md:rounded-2xl outline-none focus:bg-white hover:border-green-500 focus:ring-4 focus:ring-green-500/10 transition text-sm md:text-base font-medium" placeholder="รหัสผ่าน">
-    <i class="fa-solid fa-eye-slash absolute right-4 md:right-5 top-1/2 -translate-y-1/2 text-slate-400 text-sm md:text-base cursor-pointer hover:text-green-600 transition" onclick="togglePassword('password', this)"></i>
-</div>
                 <div class="flex items-center justify-between mt-4 mb-4 px-1">
                     <label class="flex items-center text-sm text-slate-600 cursor-pointer hover:text-slate-800 transition">
                         <input type="checkbox" id="rememberMe" class="mr-2 w-4 h-4 rounded border-slate-300 text-theme focus:ring-theme focus:ring-2">
@@ -171,7 +171,8 @@
             <p class="mt-6 text-[9px] text-slate-400 font-light tracking-widest uppercase opacity-80">&copy; 2026 จัดทำโดย นายพงศ์ภัค โชครักษ์</p>
 </div>
 
-<div id="adminLoginBox" class="hidden relative bg-white/80 backdrop-blur-2xl px-6 pt-8 pb-12 sm:p-12 md:p-14 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all flex flex-col justify-center mx-auto mt-10 mb-6 sm:mt-16 md:mt-auto md:mb-auto">    
+        <div id="adminLoginBox" class="hidden relative bg-white/80 backdrop-blur-2xl px-6 pt-8 pb-12 sm:p-12 md:p-14 rounded-[2rem] md:rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.04)] w-[94vw] sm:w-[85vw] sm:max-w-[460px] md:max-w-[540px] border border-white z-10 text-center transition-all flex flex-col justify-center mx-auto mt-10 sm:mt-16 mb-6">
+    
             <div class="w-16 h-16 md:w-20 md:h-20 admin-gradient-theme rounded-[1rem] md:rounded-[1.5rem] shadow-lg shadow-green-200/50 flex items-center justify-center mx-auto mb-5 md:mb-6 animate-float">
                 <i class="fa-solid fa-server text-3xl md:text-4xl text-white"></i>
             </div>
@@ -227,17 +228,15 @@
                 </div>
             </div>
 
-            <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.03)] border border-slate-100 col-span-1 lg:col-span-2 relative overflow-hidden flex flex-col items-center justify-center min-h-[250px]">
-    <!-- หัวข้อกราฟ -->
-    <div class="w-full text-center mb-4 relative z-10">
-        <h3 class="text-sm md:text-base font-semibold text-slate-700 lang-txt" data-th="📊 สถิติสถานะและเกียรตินิยมรวม" data-en="📊 Honors Statistics">📊 สถิติสถานะและเกียรตินิยมรวม</h3>
-    </div>
-    
-    <!-- พื้นที่วาดกราฟ -->
-    <div class="relative w-full h-full max-h-[200px] flex justify-center items-center z-10">
-        <canvas id="honorsChart"></canvas>
-    </div>
-</div>
+            <div class="bg-white p-6 md:p-8 rounded-[2.5rem] shadow-[0_8px_30px_rgba(0,0,0,0.03)] border border-slate-100 col-span-1 lg:col-span-2 relative overflow-hidden flex items-center justify-center min-h-[140px] md:min-h-[160px]">
+                <div class="absolute inset-0 bg-slate-50/50"></div>
+                <div class="text-center relative z-10">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-white text-slate-300 rounded-full flex items-center justify-center text-xl md:text-2xl mx-auto mb-3 shadow-sm border border-slate-100">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <p class="text-sm md:text-base font-semibold text-slate-400 lang-txt" data-th="พื้นที่เตรียมแสดงกราฟสถิติเกียรตินิยม" data-en="Honors Statistics Graph Area">พื้นที่เตรียมแสดงกราฟสถิติเกียรตินิยม</p>
+                    <p class="text-[10px] md:text-xs text-slate-300 mt-1 uppercase tracking-wider">(Coming in Phase 4)</p>
+                </div>
             </div>
         </div> 
 
@@ -462,16 +461,8 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 // ---------------------------------------
 
-        // 🌟 ตารางเก็บเกณฑ์หน่วยกิตรวมที่ต้องเรียนจบของแต่ละปี
-        const REQUIRED_CREDITS = {
-            "2563": 149, 
-            "2564": 149, 
-            "2565": 149, 
-            "2566": 149, 
-            "2567": 141, 
-            "2568": 141,
-            "2569": 141 
-        };
+        let currentUser = {};
+        const TOTAL_CREDITS = 141;
         let currentTotalCredits = 0; // 🌟 ตัวแปรกลางเก็บหน่วยกิตปัจจุบัน
         let currentTotalPoints = 0;  // 🌟 ตัวแปรกลางเก็บแต้มคะแนนปัจจุบัน
         
@@ -550,86 +541,11 @@ const db = firebase.firestore();
             { code: 'PSY3214', name: 'จิตวิทยาเด็กและวัยรุ่น', credit: 3, category: 'วิชาเอกเลือก (เลือก 21 หน่วยกิต)' },
             { code: 'RAM3099', name: 'เศรษฐกิจพอเพียงกับการพัฒนาชีวิต', credit: 3, category: 'วิชาเอกเลือก (เลือก 21 หน่วยกิต)' }
         ];
-
-        // 🌟 สร้างชุดวิชาสำหรับปีการศึกษา 2563 - 2566
-let COURSES_2563 = [
-    // --- หมวดวิชาศึกษาทั่วไป ---
-    { code: 'PSY1001', name: 'จิตวิทยาทั่วไป', credit: 3, category: '1. ศึกษาทั่วไป (สังคมศาสตร์ บังคับ)' },
-    { code: 'RAM1000', name: 'ความรู้คู่คุณธรรม', credit: 3, category: '1. ศึกษาทั่วไป (สังคมศาสตร์ บังคับ)' },
-    { code: 'LAW1004', name: 'ความรู้เบื้องต้นเกี่ยวกับกฎหมายทั่วไป', credit: 3, category: '2. ศึกษาทั่วไป (สังคมศาสตร์ เลือก 1 วิชา)' },
-    { code: 'POL1101', name: 'การเมืองการปกครองไทย', credit: 3, category: '2. ศึกษาทั่วไป (สังคมศาสตร์ เลือก 1 วิชา)' },
-    { code: 'LIS1001', name: 'สารสนเทศและเทคโนโลยีเพื่อการค้นคว้า', credit: 2, category: '3. ศึกษาทั่วไป (มนุษยศาสตร์ บังคับ)' },
-    { code: 'ART1003', name: 'ศิลปวิจักษณ์', credit: 2, category: '4. ศึกษาทั่วไป (มนุษยศาสตร์ เลือก 1 วิชา กลุ่มศิลปะ)' },
-    { code: 'MSA1003', name: 'ดนตรีวิจักษณ์', credit: 2, category: '4. ศึกษาทั่วไป (มนุษยศาสตร์ เลือก 1 วิชา กลุ่มศิลปะ)' },
-    { code: 'HED1101', name: 'การสร้างเสริมสุขภาพเพื่อชีวิต', credit: 2, category: '5. ศึกษาทั่วไป (มนุษยศาสตร์ เลือก 1 วิชา กลุ่มสุขภาพ)' },
-    { code: 'GAS1001', name: 'กีฬาและการออกกำลังกายสำหรับสุขภาพ', credit: 2, category: '5. ศึกษาทั่วไป (มนุษยศาสตร์ เลือก 1 วิชา กลุ่มสุขภาพ)' },
-    { code: 'THA1001', name: 'ลักษณะและการใช้ภาษาไทย', credit: 3, category: '6. ศึกษาทั่วไป (ภาษา บังคับ)' },
-    { code: 'ENG1001', name: 'ประโยคภาษาอังกฤษพื้นฐานและศัพท์จำเป็นในชีวิตประจำวัน', credit: 3, category: '6. ศึกษาทั่วไป (ภาษา บังคับ)' },
-    { code: 'ENG1002', name: 'ประโยคภาษาอังกฤษและศัพท์ทั่วไป', credit: 3, category: '6. ศึกษาทั่วไป (ภาษา บังคับ)' },
-    { code: 'ENG2001', name: 'การอ่านเอาความภาษาอังกฤษ', credit: 3, category: '6. ศึกษาทั่วไป (ภาษา บังคับ)' },
-    { code: 'ENG2002', name: 'การอ่านตีความภาษาอังกฤษ', credit: 3, category: '6. ศึกษาทั่วไป (ภาษา บังคับ)' },
-    { code: 'CTL1001', name: 'ความฉลาดรู้ด้านคอมพิวเตอร์ เทคโนโลยี และสารสนเทศในชีวิตประจำวัน', credit: 3, category: '7. ศึกษาทั่วไป (คณิตศาสตร์-วิทยาศาสตร์ เลือก 1 วิชา)' },
-    { code: 'SCI1002', name: 'วิทยาศาสตร์และคณิตศาสตร์ใช้ในชีวิตประจำวัน 2', credit: 3, category: '7. ศึกษาทั่วไป (คณิตศาสตร์-วิทยาศาสตร์ เลือก 1 วิชา)' },
-
-    // --- หมวดวิชาชีพครู ---
-    { code: 'EDU1202', name: 'นวัตกรรมและเทคโนโลยีดิจิทัลเพื่อการศึกษา', credit: 3, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU1401', name: 'ค่านิยมและคุณลักษณะความเป็นครู', credit: 3, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU2103', name: 'จิตวิทยาเพื่อการเรียนรู้', credit: 3, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU2505', name: 'การวัดผล การประเมินผล และการวิจัยทางการศึกษา', credit: 3, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU2604', name: 'ศาสตร์หลักสูตรและการจัดการเรียนรู้', credit: 3, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU2606', name: 'ภาษาไทยเพื่อการสื่อสารสำหรับครู', credit: 2, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU3308', name: 'การประกันคุณภาพการศึกษาสำหรับครู', credit: 2, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU3607', name: 'ภาษาอังกฤษเพื่อการสื่อสารสำหรับครู', credit: 2, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU4309', name: 'ความสัมพันธ์ของผู้ปกครองและชุมชน', credit: 3, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU4001', name: 'การปฏิบัติการสอนในสถานศึกษา 1', credit: 6, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU4002', name: 'สัมมนาการปฏิบัติการสอนในสถานศึกษา 1', credit: 1, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'EDU4003', name: 'การปฏิบัติการสอนในสถานศึกษา 2', credit: 6, category: '8. วิชาชีพครู (บังคับ)' },
-    { code: 'CEE3209', name: 'การสอนระดับประถมศึกษา', credit: 4, category: '9. วิชาชีพครู (บังคับสาขาวิชาเอก เลือก 1 วิชา)' },
-    { code: 'CEN3310', name: 'การสอนวิชาเอกภาษาอังกฤษ', credit: 4, category: '9. วิชาชีพครู (บังคับสาขาวิชาเอก เลือก 1 วิชา)' },
-    { code: 'CCH3301', name: 'การสอนวิชาเอกภาษาจีน', credit: 4, category: '9. วิชาชีพครู (บังคับสาขาวิชาเอก เลือก 1 วิชา)' },
-    { code: 'CSO3301', name: 'การสอนวิชาเอกสังคมศึกษา', credit: 4, category: '9. วิชาชีพครู (บังคับสาขาวิชาเอก เลือก 1 วิชา)' },
-    { code: 'CMA3301', name: 'การสอนวิชาเอกคณิตศาสตร์', credit: 4, category: '9. วิชาชีพครู (บังคับสาขาวิชาเอก เลือก 1 วิชา)' },
-    { code: 'CCE3109', name: 'การสอนวิชาเอกคอมพิวเตอร์ศึกษา', credit: 4, category: '9. วิชาชีพครู (บังคับสาขาวิชาเอก เลือก 1 วิชา)' },
-
-    // --- หมวดวิชาเอกประถมศึกษา ---
-    { code: 'CEC4311', name: 'การพัฒนาการสอนด้วยการวิจัย', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE2301', name: 'หลักสูตรและการเรียนการสอนในระดับประถม', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE2302', name: 'เทคนิคการสอน', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE2304', name: 'การพัฒนาหลักสูตรสถานศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE2305', name: 'สุขศึกษาและพลศึกษาสำหรับครูประถมศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE2306', name: 'การงานอาชีพและเทคโนโลยีสำหรับครูประถมศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE2307', name: 'ภาษาไทยสำหรับครูประถมศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE2308', name: 'ความคิดสร้างสรรค์สำหรับเด็ก', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE3301', name: 'คณิตศาสตร์สำหรับครูประถมศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE3302', name: 'ศิลปะสำหรับครูประถมศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE3303', name: 'สังคมศึก๋ษา ศาสนา และวัฒนธรรมสำหรับครูประถมศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE3304', name: 'วิทยาศาสตร์สำหรับครูประถมศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE3305', name: 'ภาษาต่างประเทศสำหรับครูประถมศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE3306', name: 'การจัดกิจกรรมการเรียนการเรียนรู้นอกห้องเรียนสำหรับเด็ก', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE4301', name: 'วรรณกรรมสำหรับเด็กปฐมวัยและประถมศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE4302', name: 'นวัตกรรมและเทคโนโลยีการสอนในระดับประถมศึกษา', credit: 3, category: '10. วิชาเอกประถมศึกษา (บังคับ)' },
-    { code: 'CEE2303', name: 'การสอนเพื่อพัฒนาศักยภาพเด็ก', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'CEE3401', name: 'การจัดการเรียนรู้แบบบูรณาการ', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'CEE3402', name: 'การจัดกิจกรรมเสริมหลักสูตร', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'CEE3403', name: 'กิจกรรมการสอนคณิตศาสตร์สำหรับครูประถมศึกษา', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'CEE3404', name: 'การจัดกิจกรรมเตรียมความพร้อมสำหรับเด็ก', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'CEE4402', name: 'การสอนทักษะชีวิตสำหรับผู้เรียน', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'CTH3109', name: 'การจัดกิจกรรมการเรียนการสอนวิชาภาษาไทย', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'CTL3002', name: 'การสอนเด็กพิเศษ', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'CTL4002', name: 'การจัดการเรียนรู้ที่ผู้เรียนเป็นศูนย์กลาง', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'MER3006', name: 'การวัดและประเมินผลในระดับประถมศึกษา', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'PSY2201', name: 'จิตวิทยาการแนะแนวและปรึกษาเบื้องต้น', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' },
-    { code: 'RAM3099', name: 'เศรษฐกิจพอเพียงกับการพัฒนาชีวิต', credit: 3, category: '11. วิชาเอกประถมศึกษา (เลือก)' }
-];
         // 🌟 สร้างระบบแยกเล่มหลักสูตร (Curriculum Routing)
         const CURRICULUMS = {
-            "2563": COURSES_2563, // 👈 63-66 ใช้ของเก่า
-            "2564": COURSES_2563, 
-            "2565": COURSES_2563, 
-            "2566": COURSES_2563, 
-            "2567": BASE_COURSES, // 👈 67-69 ใช้ของใหม่
-            "2568": BASE_COURSES, 
-            "2569": BASE_COURSES  
+            "2567": BASE_COURSES,
+            "2568": BASE_COURSES, // ตอนนี้ดึงข้อมูลของ 67 ไปใช้พลางๆ ก่อน ถ้าวิชา 68 มาแล้วค่อยมาสร้างแยกทีหลัง
+            "2569": BASE_COURSES  // เหมือนกันครับ ดึงของ 67 ไปก่อน
         };
 
         // ฟังก์ชันอัจฉริยะ: เช็กว่าเป็นเด็กปีไหน ถ้าเป็นคนเก่าที่ไม่มีข้อมูล จะปัดเป็น 2567 อัตโนมัติ
@@ -782,11 +698,10 @@ let COURSES_2563 = [
             didOpen: (toast) => { toast.onmouseenter = Swal.stopTimer; toast.onmouseleave = Swal.resumeTimer; }
         });
 
-        
-applyDynamicTheme(); 
-window.onload = function() {
-    updateLanguageUI(); // ส่วนนี้ปล่อยให้ทำงานตอนโหลดเสร็จเหมือนเดิมครับ
-};
+        window.onload = function() {
+            applyDynamicTheme(); 
+            updateLanguageUI(); 
+        };
 
         setInterval(() => {
             let d = new Date();
@@ -828,35 +743,23 @@ window.onload = function() {
         }
 
         function clearDashboardData() {
-    let loadingTxt = appLang === 'en' ? 'Loading data... 🚀' : 'กำลังดึงข้อมูลรายวิชา... รอสักครู่นะครับ 🚀';
-    
-    // 🛠️ ฟังก์ชันตัวช่วย: เช็คก่อนว่ามีกล่องอยู่จริงไหม ถึงจะเปลี่ยนค่า (ป้องกัน Error สีแดง)
-    const updateHTML = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
-    const updateText = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
-
-    // ใช้ฟังก์ชันตัวช่วยจัดการข้อมูลทั้งหมด
-    updateHTML('courseContainer', `<div class="text-center py-24 text-slate-400 text-sm font-light"><i class="fa-solid fa-spinner fa-spin text-2xl text-theme mb-3"></i><br>${loadingTxt}</div>`);
-    updateHTML('passedContainer', '');
-    updateText('profileName', '-');
-    updateText('headerName', '-');
-    updateText('profileId', '-');
-    updateText('profileEmail', '-');
-    updateText('totalCredits', '0');
-    updateText('remainingCredits', '141');
-    updateText('passedCount', '0');
-    updateText('gpax', '0.00');
-    updateText('progressText', '0%');
-    
-    // สำหรับ Style และ Class ก็ต้องเช็คก่อนทำเหมือนกัน
-    const progressBar = document.getElementById('progressBar');
-    if (progressBar) progressBar.style.width = '0%';
-    
-    const honorsBadge = document.getElementById('honorsBadge');
-    if (honorsBadge) honorsBadge.classList.add('hidden');
-    
-    updateHTML('passedSummary', '');
-    passedCoursesList = [];
-}
+            let loadingTxt = appLang === 'en' ? 'Loading data... 🚀' : 'กำลังดึงข้อมูลรายวิชา... รอสักครู่นะครับ 🚀';
+            document.getElementById('courseContainer').innerHTML = `<div class="text-center py-24 text-slate-400 text-sm font-light"><i class="fa-solid fa-spinner fa-spin text-2xl text-theme mb-3"></i><br>${loadingTxt}</div>`;
+            document.getElementById('passedContainer').innerHTML = '';
+            document.getElementById('profileName').innerText = '-';
+            document.getElementById('headerName').innerText = '-';
+            document.getElementById('profileId').innerText = '-';
+            document.getElementById('profileEmail').innerText = '-';
+            document.getElementById('totalCredits').innerText = '0';
+            document.getElementById('remainingCredits').innerText = '141';
+            document.getElementById('passedCount').innerText = '0';
+            document.getElementById('gpax').innerText = '0.00';
+            document.getElementById('progressText').innerText = '0%';
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('honorsBadge').classList.add('hidden');
+            document.getElementById('passedSummary').innerHTML = '';
+            passedCoursesList = [];
+        }
 
        function login(loginType) {
     Swal.fire({ title: appLang === 'en' ? 'Logging in...' : 'กำลังเข้าสู่ระบบ...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
@@ -935,10 +838,6 @@ function showRegisterPopup() {
             
             <select id="regCurriculumYear" class="swal2-input text-sm !mx-0 !w-full !mt-3 bg-white" style="height: 50px; padding: 0 12px; border-color: #e2e8f0;">
                 <option value="" disabled selected>-- เลือกปีโครงสร้างหลักสูตร --</option>
-                <option value="2563">หลักสูตร พ.ศ. 2563</option>
-                <option value="2564">หลักสูตร พ.ศ. 2564</option>
-                <option value="2565">หลักสูตร พ.ศ. 2565</option>
-                <option value="2566">หลักสูตร พ.ศ. 2566</option>
                 <option value="2567">หลักสูตร พ.ศ. 2567</option>
                 <option value="2568">หลักสูตร พ.ศ. 2568</option>
                 <option value="2569">หลักสูตร พ.ศ. 2569</option>
@@ -1319,20 +1218,16 @@ function calculateStatus(totalCr) {
             currentTotalCredits = totalCr;
             currentTotalPoints = totalPt;
             
-            // 🌟 1. ดึงเป้าหมายหน่วยกิตตามชั้นปีของเด็กที่ล็อกอิน (ถ้าไม่มีข้อมูลให้ใช้ 141 เป็นค่าเริ่มต้น)
-let targetCr = REQUIRED_CREDITS[currentUser.curriculumYear] || 141;
-            
-            // 🌟 2. คำนวณส่วนที่เหลือและเปอร์เซ็นต์ โดยเปลี่ยนไปใช้ targetCr แทน
-            let remaining = Math.max(0, targetCr - totalCr);
+            let remaining = Math.max(0, TOTAL_CREDITS - totalCr);
             document.getElementById('remainingCredits').innerText = remaining;
             document.getElementById('totalCredits').innerText = totalCr;
             document.getElementById('passedCount').innerText = count;
             
-            let perc = Math.min(100, (totalCr/targetCr)*100);
+            let perc = Math.min(100, (totalCr/TOTAL_CREDITS)*100);
             document.getElementById('progressText').innerText = perc.toFixed(1) + '%';
             document.getElementById('progressBar').style.width = perc + '%';
 
-            // 🎯 เพิ่มป้ายสถานะมุมขวาบนตรงนี้ (ส่วนนี้ลงไปปล่อยไว้เหมือนเดิมเลยครับ)
+            // 🎯 เพิ่มป้ายสถานะมุมขวาบนตรงนี้
             let badge = document.getElementById('honorsBadge');
             badge.classList.remove('hidden'); // แสดงป้ายเสมอ
 
@@ -1601,9 +1496,6 @@ let targetCr = REQUIRED_CREDITS[currentUser.curriculumYear] || 141;
                 document.getElementById('adminTotalUsers').innerHTML = `${count} <span class="text-sm font-medium text-slate-400">${appLang === 'en' ? 'Accounts' : 'บัญชี'}</span>`;
                 document.getElementById('userContainer').innerHTML = html || `<p class="text-center py-20 text-slate-400 text-sm">${appLang === 'en' ? 'No users found' : 'ไม่มีข้อมูลนักศึกษาในระบบ'}</p>`;
                 Swal.close(); 
-
-                initHonorsChart(); // เรียกให้กราฟทำงาน
-                
             }).catch((error) => {
                 console.error("Error loading users: ", error);
                 Swal.fire('ข้อผิดพลาด', 'ไม่สามารถดึงข้อมูลนักศึกษาได้', 'error');
@@ -1753,25 +1645,14 @@ function syncCoursesToDB() {
             
             try {
                 let batch = db.batch();
-
-                let curRef63 = db.collection("Curriculums").doc("2563");
-let curRef64 = db.collection("Curriculums").doc("2564");
-let curRef65 = db.collection("Curriculums").doc("2565");
-let curRef66 = db.collection("Curriculums").doc("2566");
+                
                 let curRef67 = db.collection("Curriculums").doc("2567");
                 let curRef68 = db.collection("Curriculums").doc("2568");
                 let curRef69 = db.collection("Curriculums").doc("2569");
-
-                // ตรงนี้ต้องเป็น COURSES_2563 นะครับ (วิชาชุดเก่า)
-batch.set(curRef63, { year: "2563", courses: COURSES_2563 });
-batch.set(curRef64, { year: "2564", courses: COURSES_2563 });
-batch.set(curRef65, { year: "2565", courses: COURSES_2563 });
-batch.set(curRef66, { year: "2566", courses: COURSES_2563 });
-
-// ตรงนี้เป็น BASE_COURSES (วิชาชุดใหม่ปี 67)
-batch.set(curRef67, { year: "2567", courses: BASE_COURSES });
-batch.set(curRef68, { year: "2568", courses: BASE_COURSES });
-batch.set(curRef69, { year: "2569", courses: BASE_COURSES });
+                
+                batch.set(curRef67, { year: "2567", courses: BASE_COURSES });
+                batch.set(curRef68, { year: "2568", courses: BASE_COURSES }); 
+                batch.set(curRef69, { year: "2569", courses: BASE_COURSES }); 
                 
                 batch.commit().then(() => {
                     Swal.fire('สำเร็จ!', 'อัปโหลดรายวิชาเข้าฐานข้อมูลเรียบร้อยแล้ว!', 'success');
@@ -1986,124 +1867,6 @@ function exportToExcel() {
         console.error("Export Error:", err);
         Swal.fire('ผิดพลาด', 'ไม่สามารถดึงข้อมูลเพื่อสำรองไฟล์ได้', 'error');
     });
-}
-        // 📊 ฟังก์ชันดึงข้อมูลนักศึกษาทั้งหมดมาประมวลผลทำกราฟสถิติ
-async function initHonorsChart() {
-    try {
-        // 1. ดึงข้อมูล Users เฉพาะคนที่เป็น student ทั้งหมดจาก Firestore
-        const snapshot = await db.collection("Users").where("role", "==", "student").get();
-        
-        let normalCount = 0;
-        let probationCount = 0;
-        let honorsCount = 0;
-
-        // 2. วิ่งลูปนับจำนวนแยกตามเกณฑ์สถิติ
-        snapshot.forEach(doc => {
-            const student = doc.data();
-            
-            // 💡 อิงตามเกรดเฉลี่ยสะสม (ถ้ามีเก็บไว้) หรือเงื่อนไขสถานะในระบบ
-            if (student.status === "เฝ้าระวัง") {
-                probationCount++;
-            } else if (student.gpa >= 3.50) { // สมมุติตัวอย่างเงื่อนไขเกียรตินิยม
-                honorsCount++;
-            } else {
-                normalCount++;
-            }
-        });
-
-        // 3. เริ่มวาดกราฟลงบน Canvas
-        const ctx = document.getElementById('honorsChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut', // ใช้กราฟทรงโดนัท สวยงามและประหยัดพื้นที่ Dashboard
-            data: {
-                labels: ['สถานะปกติ', 'เฝ้าระวัง/ตกค้าง', 'เกณฑ์เกียรตินิยม'],
-                datasets: [{
-                    data: [normalCount, probationCount, honorsCount],
-                    backgroundColor: [
-                        '#10B981', // สีเขียว Emerald
-                        '#EF4444', // สีแดง Red
-                        '#F59E0B'  // สีส้ม Amber
-                    ],
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom', // เอาป้ายคำอธิบายไปไว้ด้านล่าง
-                        labels: {
-                            boxWidth: 12,
-                            font: { size: 11, family: 'Kanit' }
-                        }
-                    }
-                }
-            }
-        });
-
-    } catch (error) {
-        console.error("Error loading chart statistics:", error);
-    }
-}
-
-// 💡 อย่าลืมใส่คำสั่งนี้ไว้ในฟังก์ชันตอนที่แอดมินล็อกอินสำเร็จ หรือตอนโหลดหน้าแผงควบคุมเสร็จด้วยนะครับ
-// initHonorsChart();
-        // 📊 ฟังก์ชันวาดกราฟสถิติ
-async function initHonorsChart() {
-    try {
-        const snapshot = await db.collection("Users").where("role", "==", "student").get();
-        let normalCount = 0;
-        let probationCount = 0;
-        let honorsCount = 0;
-
-        // วิ่งลูปเช็คสถานะนักศึกษาแต่ละคน (ตัวอย่างข้อมูลเบื้องต้น)
-        snapshot.forEach(doc => {
-            const student = doc.data();
-            // สมมติฐานเช็คจากเกรด หรือถ้ามีสถานะเก็บไว้
-            if (student.status === "เฝ้าระวัง" || student.status === "ตกค้าง") {
-                probationCount++;
-            } else if (student.gpa && student.gpa >= 3.50) { 
-                honorsCount++;
-            } else {
-                normalCount++;
-            }
-        });
-
-        // ล้างกราฟเก่าออกก่อน (ป้องกันกราฟซ้อนกันเวลาโหลดใหม่)
-        let chartStatus = Chart.getChart("honorsChart");
-        if (chartStatus != undefined) {
-            chartStatus.destroy();
-        }
-
-        // เริ่มวาดกราฟ
-        const ctx = document.getElementById('honorsChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['สถานะปกติ', 'เฝ้าระวัง/ตกค้าง', 'เกณฑ์เกียรตินิยม'],
-                datasets: [{
-                    data: [normalCount, probationCount, honorsCount],
-                    backgroundColor: ['#10B981', '#EF4444', '#F59E0B'],
-                    borderWidth: 2,
-                    borderColor: '#ffffff'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: { font: { family: 'Prompt' } }
-                    }
-                }
-            }
-        });
-    } catch (error) {
-        console.error("Error loading chart:", error);
-    }
 }
     </script>
 </body>
